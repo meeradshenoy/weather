@@ -69,10 +69,6 @@ light/dark) by default. You can manually toggle between themes in the app settin
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - Weather data provided by [OpenWeatherMap](https://openweathermap.org/).
