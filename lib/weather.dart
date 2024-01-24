@@ -18,6 +18,7 @@ class _WeatherState extends State<Weather> {
   final _weatherService = WeatherService(ApiKeys.weatherApiKey);
   WeatherData? _weatherData;
 
+  // Fetch weather data based on the current city
   _fetchWeather() async {
     try {
       String city = await _weatherService.getCurrentCity();
@@ -31,6 +32,7 @@ class _WeatherState extends State<Weather> {
     }
   }
 
+  // Determine the appropriate Lottie animation based on weather conditions
   String getWeatherAnimation(String condition) {
     switch (condition.toLowerCase()) {
       case 'clouds':
@@ -53,32 +55,19 @@ class _WeatherState extends State<Weather> {
     }
   }
 
+  // Convert timestamp to local time string
   String timestampToLocalTimeString(int timestamp) {
-    // Convert timestamp to DateTime
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-
-    // Convert DateTime to local time
     DateTime localTime = dateTime.toLocal();
-
-    // Extract hours, minutes, and seconds from local time
     int hours = localTime.hour;
     int minutes = localTime.minute;
-
-    // Determine AM/PM
     String period = (hours < 12) ? 'AM' : 'PM';
-
-    // Convert hours to 12-hour format
     if (hours > 12) {
       hours -= 12;
     } else if (hours == 0) {
       hours = 12;
     }
-
-    // Format the time as a string with AM/PM
-    String formattedTime =
-        '$hours:${minutes < 10 ? '0$minutes' : '$minutes'} $period';
-
-    return formattedTime;
+    return '$hours:${minutes < 10 ? '0$minutes' : '$minutes'} $period';
   }
 
   @override
@@ -94,6 +83,7 @@ class _WeatherState extends State<Weather> {
         padding: const EdgeInsets.all(20),
         child: Stack(
           children: [
+            // Background Circles
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -111,6 +101,7 @@ class _WeatherState extends State<Weather> {
                 ),
               ],
             ),
+            // Blur Filter for Background
             BackdropFilter(
               filter: ImageFilter.blur(
                 sigmaX: 100.0,
@@ -120,8 +111,10 @@ class _WeatherState extends State<Weather> {
                 color: Colors.transparent,
               ),
             ),
+            // Loading Animation
             if (_weatherData == null)
               Center(child: Lottie.asset('assets/loader.json')),
+            // Weather Information Display
             if (_weatherData != null)
               Container(
                 padding: const EdgeInsets.only(left: 30, right: 30, bottom: 50),
@@ -130,21 +123,25 @@ class _WeatherState extends State<Weather> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Spacer(),
+                    // Weather Animation
                     Lottie.asset(
                         getWeatherAnimation(_weatherData?.mainCondition ?? "")),
                     const Spacer(),
+                    // City Name
                     Text(
                       _weatherData?.cityName.toUpperCase() ?? "Loading",
                       style: const TextStyle(
                           fontSize: 22, fontWeight: FontWeight.w800),
                       textAlign: TextAlign.center,
                     ),
+                    // Temperature
                     Text(
                       '${_weatherData?.temperature.round().toString()}°C',
                       style: const TextStyle(
                           fontSize: 32, fontWeight: FontWeight.w900),
                       textAlign: TextAlign.center,
                     ),
+                    // Weather Condition
                     Text(
                       _weatherData?.mainCondition ?? "",
                       style: const TextStyle(
@@ -152,6 +149,7 @@ class _WeatherState extends State<Weather> {
                       textAlign: TextAlign.center,
                     ),
                     const Spacer(),
+                    // Sunrise and Sunset Information
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 5),
@@ -174,6 +172,7 @@ class _WeatherState extends State<Weather> {
                     const Divider(
                       color: Colors.grey,
                     ),
+                    // Max and Min Temperature Information
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 5),
